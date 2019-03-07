@@ -1,8 +1,11 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const path = require('path')
 var enforce = require('express-sslify')
 const app = express()
 const port = process.env.PORT || 3001
+
+mongoose.connect('mongodb://mongodb/salaahTimes', { useNewUrlParser: true});
 
 app.use((req, res, next) => {
   const host = req.headers.host

@@ -1,15 +1,23 @@
 const express = require('express')
 const path = require('path')
 const router = express.Router()
-const index = require(path.join(__dirname, '../db/index.json'))
+const Masjid = require(path.join(__dirname, '../models/Masjid.js'))
 
 router.use('/:location_key', (req, res) => {
   const location_key = req.params.location_key
-  res.json(index.find(index => index.key == location_key))
+  Masjid.findOne({key: location_key}, (err, index) => {
+    err
+      ? console.log(err)
+      : res.json(index)    
+  })
 })
 
 router.use('/', (req, res) => {
-  res.json(index)
+  Masjid.find((err, masaajid) => {
+    err 
+      ? console.log(err)
+      : res.json(masaajid)
+  })
 })
 
 module.exports = router

@@ -1,48 +1,37 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+const MasjidTime = require(path.join(__dirname, '../models/MasjidTime.js'))
 var router = express.Router()
 
 router.use('/:location_key/:month/:day', (req, res, next) => {
   const location_key = req.params.location_key
   const month = req.params.month
   const day = req.params.day
-  fs.readFile(
-    path.join(__dirname, `../db/times/${location_key}.json`),
-    (err, data) => {
-      let salaah_times = JSON.parse(data)
-
-      salaah_times = salaah_times.filter(
-        times => times.month == month && times.day == day
-      )[0]
-      res.json(salaah_times)
-    }
-  )
+  MasjidTime.find({month: month, day: day, masjid_key: location_key}, (err, times) => {
+    err
+      ? console.log(err)
+      : res.json(times)
+  })
 })
 
 router.use('/:location_key/:month', (req, res) => {
   const location_key = req.params.location_key
   const month = req.params.month
-  fs.readFile(
-    path.join(__dirname, `../db/times/${location_key}.json`),
-    (err, data) => {
-      let salaah_times = JSON.parse(data)
-
-      salaah_times = salaah_times.filter(times => times.month == month)
-      res.json(salaah_times)
-    }
-  )
+  MasjidTime.find({ month: month, masjid_key: location_key }, (err, times) => {
+    err
+      ? console.log(err)
+      : res.json(times)
+  })
 })
 
 router.use('/:location_key', (req, res) => {
   const location_key = req.params.location_key
-  fs.readFile(
-    path.join(__dirname, `../db/times/${location_key}.json`),
-    (err, data) => {
-      let salaah_times = JSON.parse(data)
-      res.json(salaah_times)
-    }
-  )
+  MasjidTime.find({masjid_key: location_key }, (err, times) => {
+    err
+      ? console.log(err)
+      : res.json(times)
+  })
 })
 
 module.exports = router

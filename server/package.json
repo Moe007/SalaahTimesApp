@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "express": "^4.16.4",
-    "express-sslify": "^1.2.0"
+    "express-sslify": "^1.2.0",
+    "mongoose": "^5.4.16"
   },
   "devDependencies": {},
   "engines": {
